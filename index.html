@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script>
+    <script>
+      var socket = io.connect('http://localhost:4000/', {
+        auth: {
+          token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzNmI3OWI5My0yYjRlLTQ0NzgtYTAzMi05N2IwMWMyNGQwNDQiLCJyb2xlIjoiRU1QTE9ZRUUiLCJpYXQiOjE3MjQxMzY1NTF9.pNdpXk4v4qId2soR3MExQRp6A_mujHI_5ZJW3kDvnxY'
+        }
+      });
+
+      socket.on('connect', function () {
+        console.log('Connected socket', socket.id);
+      });
+
+      socket.on('error', function (err) {
+        console.log('Error:', err.message);
+      });
+
+      socket.on('lessonComplete', function (data) {
+        console.log('lessonComplete:', data);
+      });
+
+      socket.on('kickUser', function (data) {
+        console.log(data, 'kickUser');
+      });
+
+      socket.on('disconnect', function () {
+        console.log('Disconnect socket');
+        alert('disconnect socket');
+      });
+
+      $(function () {
+        $('#watchLesson').click(function () {
+          socket.emit('watchLesson', {
+            courseId: $('#courseId').val(),
+            lessonId: $('#lessonId').val(),
+            position: parseInt($('#lessonPosition').val()),
+            totalLessonCount: parseInt($('#totalLessonCount').val()),
+            passPercent: parseInt($('#passPercent').val())
+          });
+          console.log('Emitting watch event');
+        });
+      });
+      $(function () {
+        $('#listenBook').click(function () {
+          socket.emit('listenBook', {
+            audiobookId: $('#audiobookId').val(),
+            bookChapterId: $('#chapterId').val(),
+            position: parseInt($('#position').val()),
+            duration: parseInt($('#bookDuration').val()),
+            watchDuration: parseInt($('#watchDuration').val()),
+          });
+          console.log('Emitting watch event');
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <table>
+    <h2>Course watch 1</h2>
+
+    <table>
+      <tr>
+        <td>courseId:</td>
+        <td>
+          <input
+            id="courseId"
+            placeholder="courseId"
+            value="053b4680-acd3-45a2-a568-669d3377bc16"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>lessonId:</td>
+        <td>
+          <input
+            id="lessonId"
+            placeholder="lessonId"
+            value="54f02625-4065-4cd1-b76e-ced309296650"
+          />
+        </td>
+      </tr>
+
+      <tr>
+        <td>position:</td>
+        <td>
+          <input
+            type="number"
+            id="lessonPosition"
+            placeholder="position"
+            value="1"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>totalLessonCount:</td>
+        <td>
+          <input
+            type="number"
+            id="totalLessonCount"
+            placeholder="totalLessonCount"
+            value="1"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>pass percent:</td>
+        <td>
+          <input
+            type="number"
+            id="passPercent"
+            placeholder="passPercent"
+            value="100"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <button id="watchLesson">Watch</button>
+        </td>
+      </tr>
+    </table>
+
+    <h2>audiobook listen</h2>
+
+    <table>
+      <tr>
+        <td>audiobookId:</td>
+        <td>
+          <input
+            id="audiobookId"
+            placeholder="audiobookId"
+            value="7d57c430-6cde-4d3f-8cc5-3b688a6341d5"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>chapterId:</td>
+        <td>
+          <input
+            id="chapterId"
+            placeholder="chapterId"
+            value="31705e0a-7306-40ac-a5fb-158dd6795ae1"
+          />
+        </td>
+      </tr>
+
+      <tr>
+        <td>position:</td>
+        <td>
+          <input
+            type="number"
+            id="position"
+            placeholder="position"
+            value="1"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>duration:</td>
+        <td>
+          <input
+            type="number"
+            id="bookDuration"
+            placeholder="duration"
+            value="1"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>watchDuration:</td>
+        <td>
+          <input
+            type="number"
+            id="watchDuration"
+            placeholder="watchDuration"
+            value="1"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <button id="listenBook">Watch</button>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
